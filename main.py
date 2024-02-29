@@ -1,5 +1,8 @@
+from pickle import FRAME
 import tkinter as tk
+from types import FrameType
 from converter import select_file, convert_to_stl
+from tkinter import Frame, font as tkFont
 
 # Using the tkinter library to create a simple GUI
 # https://docs.python.org/3/library/tkinter.html#the-window-manager
@@ -16,36 +19,32 @@ def on_select_file():
 
 # Create a root window
 root = tk.Tk()
-root.geometry("1260x720")
+root.geometry("360x310")
 root.title("CSV to STL Converter")
-root.configure(bg='white')  
+root.configure(bg='beige')  
 
 # Create a label
-label = tk.Label(root, text="Convert a point cloud from a CSV file to an STL file", bg='white', font='Arial 20 bold italic')
+label = tk.Label(root, text="Convert a CSV to STL file", bg='beige', font='Arial 20 bold italic')
 label.pack(padx=20, pady=20)
 
+# Define a custom font
+customFont = tkFont.Font(family="Helvetica", size=12)
 
-# Create the buttons and the labels
-select_button_label = tk.Label(root, text="Select the input file", bg='white', font='Arial 12')
-select_button = tk.Button(root, text="Select file", command=on_select_file, bg='#00B2EE')
+# Use frames for organization
+frame = tk.Frame(root, bg='beige')
+frame.pack(pady=10)
 
-convert_button_label = tk.Label(root, text="Convert the file to STL", bg='white', font='Arial 12')
-convert_button = tk.Button(root, text="Convert to STL", command=convert_to_stl, bg='#00B2EE', state=tk.DISABLED)
+select_button = tk.Button(frame, text="Select file", command=on_select_file, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT)
+convert_button = tk.Button(frame, text="Convert to STL", command=convert_to_stl, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f', fg='white', font=customFont, relief=tk.FLAT)
 
-close_button_label = tk.Label(root, text="Close the App", bg='white', font='Arial 12')
-close_button = tk.Button(root, text="Close", command=root.destroy, bg='red')
 
 # Pack the buttons and labels into the window
 
-select_button_label.pack()
-select_button.pack(pady=(0, 10))
-
-convert_button_label.pack()
-convert_button.pack(pady=(0, 10))
-
-close_button_label.pack()
-close_button.pack(pady=(0, 10))
-
+# Arrange buttons with consistent padding
+select_button.pack(fill=tk.X, padx=30, pady=7)
+convert_button.pack(fill=tk.X, padx=30, pady=7)
+close_button.pack(fill=tk.X, padx=30, pady=7)
 # Start the main loop
 root.mainloop()
 
