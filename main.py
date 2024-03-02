@@ -22,6 +22,7 @@ root = tk.Tk()
 root.geometry("360x310")
 root.title("CSV to STL Converter")
 root.configure(bg='beige')  
+checkbox_action = tk.BooleanVar() 
 
 # Create a label
 label = tk.Label(root, text="Convert a CSV to STL file", bg='beige', font='Arial 20 bold italic')
@@ -35,14 +36,15 @@ frame = tk.Frame(root, bg='beige')
 frame.pack(pady=10)
 
 select_button = tk.Button(frame, text="Select file", command=on_select_file, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT)
-convert_button = tk.Button(frame, text="Convert to STL", command=convert_to_stl, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+checkbox = tk.Checkbutton(frame, text="Convert from meters to latitude/longitude/bathymetry", variable=checkbox_action, bg='beige', font=customFont)
+convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get()), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f', fg='white', font=customFont, relief=tk.FLAT)
 
 
-# Pack the buttons and labels into the window
 
 # Arrange buttons with consistent padding
 select_button.pack(fill=tk.X, padx=30, pady=7)
+checkbox.pack(padx=30, pady=7)
 convert_button.pack(fill=tk.X, padx=30, pady=7)
 close_button.pack(fill=tk.X, padx=30, pady=7)
 # Start the main loop

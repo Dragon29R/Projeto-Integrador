@@ -1,6 +1,7 @@
 import numpy as np
 import pyvista as pv
 from tkinter import filedialog
+import pandas as pd
 
 def select_file():
     global input_file
@@ -12,12 +13,22 @@ def select_file():
         return False
 
 
-def convert_to_stl():
+def convert_to_stl(checkbox_action=False):
+
     global input_file
 
     if not input_file:
         print("No input file selected. Please select an input file.")
         return
+
+    if checkbox_action:
+        df = pd.read_csv(input_file)
+        df['X'] = df['X'] / 111320
+        df['Y'] = df['Y'] / (111320 * np.cos(df['X'] * np.pi / 180))
+        df['Z'] = df['Z'] - 12000
+
+        df.to_csv(input_file, index=False)
+    
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",
