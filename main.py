@@ -1,7 +1,7 @@
 from pickle import FRAME
 import tkinter as tk
 from types import FrameType
-from converter import select_file, convert_to_stl, convert_to_obj
+from converter import select_input_file, convert_to_obj
 from tkinter import Frame, font as tkFont
 
 
@@ -23,9 +23,11 @@ def on_select_file():
 
 # Create a root window
 root = tk.Tk()
-root.geometry("360x310")
+root.geometry("460x410")
 root.title("CSV to STL Converter")
 root.configure(bg='beige')  
+checkbox_action = tk.BooleanVar() 
+center_action = tk.BooleanVar()
 
 # Create a label
 label = tk.Label(root, text="Convert a CSV to STL file", bg='beige', font='Arial 20 bold italic')
@@ -49,7 +51,6 @@ close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f'
 
 
 
-# Pack the buttons and labels into the window
 
 # Arrange buttons with consistent padding
 select_button.pack(fill=tk.X, padx=30, pady=7)

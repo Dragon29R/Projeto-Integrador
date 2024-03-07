@@ -1,9 +1,11 @@
 import numpy as np
-import pyvista as pv
 from tkinter import filedialog
+import pandas as pd
+import pyvista as pv
+
 from stl_to_obj import stl_to_obj
 
-def select_file():
+def select_input_file():
     global input_file
     input_file = filedialog.askopenfilename(title="Select input file",
                                             filetypes=(("CSV files", "*.csv"), ("all files", "*.*")))
@@ -14,14 +16,33 @@ def select_file():
         return True
     else:
         return False
+        
 
 
-def convert_to_stl():
+def convert_to_obj(checkbox_action=False, center_action=False):
+
     global input_file
 
     if not input_file:
         print("No input file selected. Please select an input file.")
         return
+
+    df = pd.read_csv(input_file)
+
+    if checkbox_action:
+        df['X'] = df['X'] / 111320
+        df['Y'] = df['Y'] / (111320 * np.cos(df['X'] * np.pi / 180))
+        df['Z'] = df['Z'] - 12000
+
+        df.to_csv(input_file, index=False, float_format='%.2f')
+
+    if center_action:
+        df['X'] = df['X'] - df['X'].mean()
+        df['Y'] = df['Y'] - df['Y'].mean()
+        df['Z'] = df['Z'] - df['Z'].mean()
+
+        df.to_csv(input_file, index=False)
+        
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",
@@ -33,17 +54,22 @@ def convert_to_stl():
 
     # Load the point cloud from the input file
     points = np.genfromtxt(input_file, delimiter=",", dtype=np.float32)
+
     point_cloud = pv.PolyData(points)
 
-    # Reconstruct the surface and save the mesh to the output file
-    mesh = point_cloud.reconstruct_surface()
-    # Reconstruct the surface and save the mesh to the output file
-    mesh = point_cloud.reconstruct_surface()
-    mesh.save(output_file)
+    # To visualize the point cloud
+    point_cloud.plot(render_points_as_spheres=True)
 
+    # To visualize the point cloud
+    point_cloud.plot(render_points_as_spheres=True)
+
+    # Reconstruct the surface and save the mesh to the output file
+    mesh = point_cloud.reconstruct_surface()
     
-
+    mesh.save(output_file)
+    
 def convert_to_obj():
     global input_file
     # Get the name string of the input file
     stl_to_obj(input_file,'ficheiro.obj', precision=6, verbose=True) # verbose means if you want to see the process description or not
+
