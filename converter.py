@@ -1,9 +1,10 @@
 import numpy as np
-import pyvista as pv
 from tkinter import filedialog
 import pandas as pd
+import pyvista as pv
 
-def select_file():
+
+def select_input_file():
     global input_file
     input_file = filedialog.askopenfilename(title="Select input file",
                                             filetypes=(("CSV files", "*.csv"), ("all files", "*.*")))
@@ -11,9 +12,10 @@ def select_file():
         return True
     else:
         return False
+        
 
 
-def convert_to_stl(checkbox_action=False):
+def convert_to_obj(checkbox_action=False, center_action=False):
 
     global input_file
 
@@ -21,14 +23,22 @@ def convert_to_stl(checkbox_action=False):
         print("No input file selected. Please select an input file.")
         return
 
+    df = pd.read_csv(input_file)
+
     if checkbox_action:
-        df = pd.read_csv(input_file)
         df['X'] = df['X'] / 111320
         df['Y'] = df['Y'] / (111320 * np.cos(df['X'] * np.pi / 180))
         df['Z'] = df['Z'] - 12000
 
+        df.to_csv(input_file, index=False, float_format='%.2f')
+
+    if center_action:
+        df['X'] = df['X'] - df['X'].mean()
+        df['Y'] = df['Y'] - df['Y'].mean()
+        df['Z'] = df['Z'] - df['Z'].mean()
+
         df.to_csv(input_file, index=False)
-    
+        
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",
@@ -40,8 +50,13 @@ def convert_to_stl(checkbox_action=False):
 
     # Load the point cloud from the input file
     points = np.genfromtxt(input_file, delimiter=",", dtype=np.float32)
+
     point_cloud = pv.PolyData(points)
+
+    # To visualize the point cloud
+    point_cloud.plot(render_points_as_spheres=True)
 
     # Reconstruct the surface and save the mesh to the output file
     mesh = point_cloud.reconstruct_surface()
     mesh.save(output_file)
+
