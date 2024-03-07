@@ -2,24 +2,21 @@ import numpy as np
 from tkinter import filedialog
 import pandas as pd
 import pyvista as pv
+from stl_to_obj import stl_to_obj 
 
-from stl_to_obj import stl_to_obj
 
 def select_input_file():
     global input_file
     input_file = filedialog.askopenfilename(title="Select input file",
                                             filetypes=(("CSV files", "*.csv"), ("all files", "*.*")))
-    
-    print(input_file)
     if input_file:
-      
         return True
     else:
         return False
         
 
 
-def convert_to_obj(checkbox_action=False, center_action=False):
+def convert_to_stl(checkbox_action=False, center_action=False):
 
     global input_file
 
@@ -60,16 +57,33 @@ def convert_to_obj(checkbox_action=False, center_action=False):
     # To visualize the point cloud
     point_cloud.plot(render_points_as_spheres=True)
 
-    # To visualize the point cloud
-    point_cloud.plot(render_points_as_spheres=True)
-
     # Reconstruct the surface and save the mesh to the output file
     mesh = point_cloud.reconstruct_surface()
-    
     mesh.save(output_file)
     
+
 def convert_to_obj():
     global input_file
-    # Get the name string of the input file
-    stl_to_obj(input_file,'ficheiro.obj', precision=6, verbose=True) # verbose means if you want to see the process description or not
+    
+    stl_to_obj(input_file)
+    print("Obj done.")
+    
 
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

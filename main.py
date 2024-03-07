@@ -1,10 +1,8 @@
 from pickle import FRAME
 import tkinter as tk
 from types import FrameType
-from converter import select_input_file, convert_to_obj
+from converter import select_input_file, convert_to_stl, convert_to_obj
 from tkinter import Frame, font as tkFont
-
-
 
 # Using the tkinter library to create a simple GUI
 # https://docs.python.org/3/library/tkinter.html#the-window-manager
@@ -12,19 +10,19 @@ from tkinter import Frame, font as tkFont
 # Aux Functions
 
 def on_select_file():
-    if select_file():
-        convert_stl_button.config(state='normal')
+    if select_input_file():
+        convert_button.config(state='normal')
         convert_obj_button.config(state='normal')
     else:
-        convert_stl_button.config(state='disabled')
-        convert_obj_button.config(state='disabled')
+        convert_button.config(state='disabled')
+        convert_obj_button.config(state='normal')
 
 
 
 # Create a root window
 root = tk.Tk()
 root.geometry("460x410")
-root.title("CSV to STL Converter")
+root.title("CSV to STL/OBJ Converter")
 root.configure(bg='beige')  
 checkbox_action = tk.BooleanVar() 
 center_action = tk.BooleanVar()
@@ -42,22 +40,24 @@ frame.pack(pady=10)
 
 select_button = tk.Button(frame, text="Select file", command=on_select_file, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT)
 
-convert_stl_button = tk.Button(frame, text="Convert to STL", command=convert_to_stl, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+checkbox = tk.Checkbutton(frame, text="Convert from meters to latitude/longitude/bathymetry", variable=checkbox_action, bg='beige', font=customFont)
 
-convert_obj_button = tk.Button(frame, text="Convert to OBJ", command=convert_to_obj, bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+center_checkbox = tk.Checkbutton(frame, text="Center the point cloud", variable=center_action, bg='beige', font=customFont)
+
+convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get(),center_action.get()), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+
+convert_obj_button = tk.Button(frame, text="Convert to OBJ", command=lambda: convert_to_obj(), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
 close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f', fg='white', font=customFont, relief=tk.FLAT)
 
 
 
-
-
 # Arrange buttons with consistent padding
 select_button.pack(fill=tk.X, padx=30, pady=7)
-convert_stl_button.pack(fill=tk.X, padx=30, pady=7)
+checkbox.pack(padx=30, pady=7)
+center_checkbox.pack(padx=30, pady=7)
+convert_button.pack(fill=tk.X, padx=30, pady=7)
 convert_obj_button.pack(fill=tk.X, padx=30, pady=7)
 close_button.pack(fill=tk.X, padx=30, pady=7)
 # Start the main loop
 root.mainloop()
-
-
