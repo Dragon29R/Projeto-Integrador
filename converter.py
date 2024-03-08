@@ -16,7 +16,7 @@ def select_input_file():
         
 
 
-def convert_to_stl(checkbox_action=False, center_action=False):
+def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
 
     global input_file
 
@@ -40,6 +40,13 @@ def convert_to_stl(checkbox_action=False, center_action=False):
 
         df.to_csv(input_file, index=False)
         
+
+    # Scale the coordinates
+    df['X'] = df['X'] * scale_factor
+    df['Y'] = df['Y'] * scale_factor
+    df['Z'] = df['Z'] * scale_factor
+
+    df.to_csv(input_file, index=False)
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",

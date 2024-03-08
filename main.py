@@ -3,6 +3,8 @@ import tkinter as tk
 from types import FrameType
 from converter import select_input_file, convert_to_stl, convert_to_obj
 from tkinter import Frame, font as tkFont
+from tkinter import DoubleVar
+
 
 # Using the tkinter library to create a simple GUI
 # https://docs.python.org/3/library/tkinter.html#the-window-manager
@@ -21,11 +23,13 @@ def on_select_file():
 
 # Create a root window
 root = tk.Tk()
-root.geometry("460x410")
+root.geometry("640x480")
 root.title("CSV to STL/OBJ Converter")
 root.configure(bg='beige')  
 checkbox_action = tk.BooleanVar() 
 center_action = tk.BooleanVar()
+scale_factor = DoubleVar(value=1.0)
+
 
 # Create a label
 label = tk.Label(root, text="Convert a CSV to STL file", bg='beige', font='Arial 20 bold italic')
@@ -44,7 +48,11 @@ checkbox = tk.Checkbutton(frame, text="Convert from meters to latitude/longitude
 
 center_checkbox = tk.Checkbutton(frame, text="Center the point cloud", variable=center_action, bg='beige', font=customFont)
 
-convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get(),center_action.get()), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+scale_label = tk.Label(frame, text="Scale factor:", bg='beige', font=customFont)
+
+scale_entry = tk.Entry(frame, textvariable=scale_factor, bg='white', font=customFont)
+
+convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get(),center_action.get(), scale_factor.get()), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
 convert_obj_button = tk.Button(frame, text="Convert to OBJ", command=lambda: convert_to_obj(), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
@@ -56,6 +64,8 @@ close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f'
 select_button.pack(fill=tk.X, padx=30, pady=7)
 checkbox.pack(padx=30, pady=7)
 center_checkbox.pack(padx=30, pady=7)
+scale_label.pack(padx=30, pady=7)
+scale_entry.pack(fill=tk.X, padx=30, pady=7)
 convert_button.pack(fill=tk.X, padx=30, pady=7)
 convert_obj_button.pack(fill=tk.X, padx=30, pady=7)
 close_button.pack(fill=tk.X, padx=30, pady=7)
