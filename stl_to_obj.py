@@ -61,7 +61,7 @@ def stl_to_obj(stl_file, obj_file=None, precision=None, verbose=False):
         print(f'Writing to {obj_file}')
     with open(obj_file, 'w+') as f:
         for vert in verts:
-            f.write(f'v {vert[0]} {vert[1]} {vert[2]}\n')
+            f.write(f'v {vert[0]} {vert[2]} {vert[1]}\n')
         for face in faces:
             f.write(f'f {face[0] + 1} {face[1] + 1} {face[2] + 1}\n')
     if verbose:
