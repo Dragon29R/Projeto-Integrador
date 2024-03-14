@@ -3,6 +3,7 @@ from tkinter import filedialog
 import pandas as pd
 import pyvista as pv
 from stl_to_obj import stl_to_obj 
+import trimesh
 
 
 def select_input_file():
@@ -75,6 +76,34 @@ def convert_to_obj():
     stl_to_obj(input_file)
     print("Obj done.")
     
+def convert_stl_to_glb():
+    global input_file
+
+    # Load the STL file
+    mesh = trimesh.load_mesh(input_file)
+
+    # Reorient the mesh
+    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, (1, 0, 0)))
+
+    # Repair the mesh
+    mesh.remove_degenerate_faces()
+
+    # Stl to GLB 
+    glb = mesh.export(file_type='glb')
+
+    #Save
+    output_file = filedialog.asksaveasfilename(title="Select output file",
+                                               defaultextension=".glb",
+                                               filetypes=(("GLB files", "*.glb"), ("all files", "*.*")))
+
+    if not output_file:
+        print("No output file selected. Please select an output file.")
+        return
+
+    with open(output_file, 'wb') as f:
+        f.write(glb)
+
+    print("GLB done.")
 
  
     

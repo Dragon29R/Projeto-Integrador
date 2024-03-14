@@ -1,7 +1,7 @@
 from pickle import FRAME
 import tkinter as tk
 from types import FrameType
-from converter import select_input_file, convert_to_stl, convert_to_obj
+from converter import select_input_file, convert_to_stl, convert_to_obj, convert_stl_to_glb
 from tkinter import Frame, font as tkFont
 from tkinter import DoubleVar
 
@@ -15,9 +15,11 @@ def on_select_file():
     if select_input_file():
         convert_button.config(state='normal')
         convert_obj_button.config(state='normal')
+        convert_glb_button.config(state='normal')
     else:
         convert_button.config(state='disabled')
-        convert_obj_button.config(state='normal')
+        convert_obj_button.config(state='disabled')
+        convert_glb_button.config(state='disabled')
 
 
 
@@ -54,7 +56,9 @@ scale_entry = tk.Entry(frame, textvariable=scale_factor, bg='white', font=custom
 
 convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get(),center_action.get(), scale_factor.get()), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
-convert_obj_button = tk.Button(frame, text="Convert to OBJ", command=lambda: convert_to_obj(), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+convert_obj_button = tk.Button(frame, text="Convert from STL to OBJ", command=lambda: convert_to_obj(), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+
+convert_glb_button = tk.Button(frame, text="Convert from STL to GLB", command=lambda: convert_stl_to_glb(), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
 close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f', fg='white', font=customFont, relief=tk.FLAT)
 
@@ -68,6 +72,7 @@ scale_label.pack(padx=30, pady=7)
 scale_entry.pack(fill=tk.X, padx=30, pady=7)
 convert_button.pack(fill=tk.X, padx=30, pady=7)
 convert_obj_button.pack(fill=tk.X, padx=30, pady=7)
+convert_glb_button.pack(fill=tk.X, padx=30, pady=7)
 close_button.pack(fill=tk.X, padx=30, pady=7)
 # Start the main loop
 root.mainloop()
