@@ -8,8 +8,7 @@ import trimesh
 
 def select_input_file():
     global input_file
-    input_file = filedialog.askopenfilename(title="Select input file",
-                                            filetypes=(("CSV files", "*.csv"), ("all files", "*.*")))
+    input_file = filedialog.askopenfilename(title="Select input file",filetypes=(("All files", "*.*"),))
     if input_file:
         return True
     else:
@@ -84,6 +83,9 @@ def convert_stl_to_glb():
 
     # Reorient the mesh
     mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, (1, 0, 0)))
+
+    # Rotate 180 degrees to the left
+    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi, (0, 1, 0)))
 
     # Repair the mesh
     mesh.remove_degenerate_faces()
