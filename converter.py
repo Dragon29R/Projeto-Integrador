@@ -4,6 +4,7 @@ import pandas as pd
 import pyvista as pv
 from stl_to_obj import stl_to_obj 
 import trimesh
+import os
 
 
 def select_input_file():
@@ -25,28 +26,22 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
         return
 
     df = pd.read_csv(input_file)
+    df_copy = df.copy()
 
     if checkbox_action:
-        df['X'] = df['X'] / 111320
-        df['Y'] = df['Y'] / (111320 * np.cos(df['X'] * np.pi / 180))
-        df['Z'] = df['Z'] - 12000
-
-        df.to_csv(input_file, index=False, float_format='%.2f')
+        df_copy['X'] = df_copy['X'] / 111320
+        df_copy['Y'] = df_copy['Y'] / (111320 * np.cos(df_copy['X'] * np.pi / 180))
+        df_copy['Z'] = df_copy['Z'] - 12000
 
     if center_action:
-        df['X'] = df['X'] - df['X'].mean()
-        df['Y'] = df['Y'] - df['Y'].mean()
-        df['Z'] = df['Z'] - df['Z'].mean()
-
-        df.to_csv(input_file, index=False)
-        
+        df_copy['X'] = df_copy['X'] - df_copy['X'].mean()
+        df_copy['Y'] = df_copy['Y'] - df_copy['Y'].mean()
+        df_copy['Z'] = df_copy['Z'] - df_copy['Z'].mean()
 
     # Scale the coordinates
-    df['X'] = df['X'] * scale_factor
-    df['Y'] = df['Y'] * scale_factor
-    df['Z'] = df['Z'] * scale_factor
-
-    df.to_csv(input_file, index=False)
+    df_copy['X'] = df_copy['X'] * scale_factor
+    df_copy['Y'] = df_copy['Y'] * scale_factor
+    df_copy['Z'] = df_copy['Z'] * scale_factor
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",
@@ -56,8 +51,11 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
         print("No output file selected. Please select an output file.")
         return
 
+    temp = "temp.csv"
+    df_copy.to_csv(temp, index=False)
+
     # Load the point cloud from the input file
-    points = np.genfromtxt(input_file, delimiter=",", dtype=np.float32)
+    points = np.genfromtxt(temp, delimiter=",", dtype=np.float32)
 
     point_cloud = pv.PolyData(points)
 
@@ -68,6 +66,7 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
     mesh = point_cloud.reconstruct_surface()
     mesh.save(output_file)
     
+    os.remove(temp)
 
 def convert_to_obj():
     global input_file
