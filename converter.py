@@ -15,8 +15,6 @@ def select_input_file():
     else:
         return False
         
-
-
 def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
 
     global input_file
@@ -59,6 +57,7 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
 
     point_cloud = pv.PolyData(points)
 
+
     # To visualize the point cloud
     point_cloud.plot(render_points_as_spheres=True)
 
@@ -74,20 +73,20 @@ def convert_to_obj():
     stl_to_obj(input_file)
     print("Obj done.")
     
-def convert_stl_to_glb():
+def convert_stl_to_glb(rotation_angle=0):
     global input_file
 
     # Load the STL file
     mesh = trimesh.load_mesh(input_file)
 
-    # Reorient the mesh
-    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, (1, 0, 0)))
-
-    # Rotate 180 degrees to the left
-    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi, (0, 1, 0)))
-
     # Repair the mesh
     mesh.remove_degenerate_faces()
+
+    #Change object from vertically oriented to horizontally oriented
+    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, (1, 0, 0)))
+
+    # Rotate the mesh
+    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.radians(float(rotation_angle)), (0, 1, 0)))
 
     # Stl to GLB 
     glb = mesh.export(file_type='glb')
