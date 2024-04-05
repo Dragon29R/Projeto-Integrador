@@ -29,7 +29,10 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
     if checkbox_action:
         df_copy['X'] = df_copy['X'] / 111320
         df_copy['Y'] = df_copy['Y'] / (111320 * np.cos(df_copy['X'] * np.pi / 180))
-        df_copy['Z'] = df_copy['Z'] - 12000
+        df_copy['Z'] = (df_copy['Z'] - 12000) / 100000
+
+        output_csv_file = os.path.splitext(input_file)[0] + "_modified.csv"
+        df_copy.to_csv(output_csv_file, index=False)
 
     if center_action:
         df_copy['X'] = df_copy['X'] - df_copy['X'].mean()

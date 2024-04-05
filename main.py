@@ -25,7 +25,7 @@ def on_select_file():
 
 # Create a root window
 root = tk.Tk()
-root.geometry("640x480")
+root.geometry("920x640")
 root.title("CSV to STL/OBJ Converter")
 root.configure(bg='beige')  
 checkbox_action = tk.BooleanVar() 
