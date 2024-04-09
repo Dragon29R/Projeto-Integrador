@@ -26,6 +26,7 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
     df = pd.read_csv(input_file)
     df_copy = df.copy()
 
+    # Convert the coordinates from meters to latitude/longitude/bathymetry
     if checkbox_action:
         df_copy['X'] = df_copy['X'] / 111320
         df_copy['Y'] = df_copy['Y'] / (111320 * np.cos(df_copy['X'] * np.pi / 180))
@@ -34,15 +35,16 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
         output_csv_file = os.path.splitext(input_file)[0] + "_modified.csv"
         df_copy.to_csv(output_csv_file, index=False)
 
-    if center_action:
-        df_copy['X'] = df_copy['X'] - df_copy['X'].mean()
-        df_copy['Y'] = df_copy['Y'] - df_copy['Y'].mean()
-        df_copy['Z'] = df_copy['Z'] - df_copy['Z'].mean()
-
     # Scale the coordinates
     df_copy['X'] = df_copy['X'] * scale_factor
     df_copy['Y'] = df_copy['Y'] * scale_factor
     df_copy['Z'] = df_copy['Z'] * scale_factor
+
+    # Center the point cloud
+    if center_action:
+        df_copy['X'] = df_copy['X'] - df_copy['X'].mean()
+        df_copy['Y'] = df_copy['Y'] - df_copy['Y'].mean()
+        df_copy['Z'] = df_copy['Z'] - df_copy['Z'].mean()
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",
@@ -58,6 +60,7 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
     # Load the point cloud from the input file
     points = np.genfromtxt(temp, delimiter=",", dtype=np.float32)
 
+    
     point_cloud = pv.PolyData(points)
 
 
