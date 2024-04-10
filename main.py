@@ -4,6 +4,7 @@ from types import FrameType
 from converter import select_input_file, convert_to_stl, convert_to_obj, convert_stl_to_glb
 from tkinter import Frame, font as tkFont
 from tkinter import DoubleVar
+import sys
 
 
 # Using the tkinter library to create a simple GUI
@@ -20,6 +21,9 @@ def on_select_file():
         convert_button.config(state='disabled')
         convert_obj_button.config(state='disabled')
         convert_glb_button.config(state='disabled')
+
+
+
 
 
 
