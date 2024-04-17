@@ -15,7 +15,7 @@ def select_input_file():
     else:
         return False
         
-def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
+def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=-1):
 
     global input_file
 
@@ -34,17 +34,49 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=1):
 
         output_csv_file = os.path.splitext(input_file)[0] + "_modified.csv"
         df_copy.to_csv(output_csv_file, index=False)
+    
+    first_coord_before_scaling = df_copy.iloc[0][['X', 'Y','Z']]
+    
+    if scale_factor == -1:
+            
+            first_coord = df_copy.iloc[0][['X', 'Y']]
+            print(first_coord)
+            last_coord = df_copy.iloc[-1][['X', 'Y']]
+            print(last_coord)
+            distance = np.linalg.norm(first_coord - last_coord)
+            
+            distance *= 100
+            print(f"Distance between the first and last coordinates: {distance:.2f} km")
 
-    # Scale the coordinates
-    df_copy['X'] = df_copy['X'] * scale_factor
-    df_copy['Y'] = df_copy['Y'] * scale_factor
-    df_copy['Z'] = df_copy['Z'] * scale_factor
+            distance *= 1000
+            df_copy['X'] = df_copy['X'] * distance
+            df_copy['Y'] = df_copy['Y'] * distance
+            df_copy['Z'] = df_copy['Z'] * distance
+
+    else:
+
+        # Scale the coordinates if received input
+        df_copy['X'] = df_copy['X'] * scale_factor
+        df_copy['Y'] = df_copy['Y'] * scale_factor
+        df_copy['Z'] = df_copy['Z'] * scale_factor
+
+    output_csv_file = os.path.splitext(input_file)[0] + "_modified_scaled.csv"
+    df_copy.to_csv(output_csv_file, index=False)
+
+
+    first_coord_after_scaling = df_copy.iloc[0][['X', 'Y','Z']]
+
+    coord_diff = first_coord_after_scaling - first_coord_before_scaling
+
 
     # Center the point cloud
     if center_action:
-        df_copy['X'] = df_copy['X'] - df_copy['X'].mean()
-        df_copy['Y'] = df_copy['Y'] - df_copy['Y'].mean()
-        df_copy['Z'] = df_copy['Z'] - df_copy['Z'].mean()
+        df_copy['X'] = df_copy['X'] - coord_diff['X']
+        df_copy['Y'] = df_copy['Y'] - coord_diff['Y']
+        df_copy['Z'] = df_copy['Z'] - coord_diff['Z']
+
+    output_csv_file = os.path.splitext(input_file)[0] + "_modified_centered.csv"
+    df_copy.to_csv(output_csv_file, index=False)
 
     output_file = filedialog.asksaveasfilename(title="Select output file",
                                                defaultextension=".stl",
@@ -89,7 +121,11 @@ def convert_stl_to_glb(rotation_angle=0):
     mesh.remove_degenerate_faces()
 
     #Change object from vertically oriented to horizontally oriented
-    mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, (1, 0, 0)))
+    mesh.apply_transform(trimesh.transformations.rotation_matrix(-np.pi / 2, (1, 0, 0)))
+
+    # Make the mesh double-sided
+    mesh = trimesh.Trimesh(vertices=np.concatenate([mesh.vertices, mesh.vertices]),
+                           faces=np.concatenate([mesh.faces, mesh.faces[:, ::-1]]))
 
     # Rotate the mesh
     mesh.apply_transform(trimesh.transformations.rotation_matrix(np.radians(float(rotation_angle)), (0, 1, 0)))
