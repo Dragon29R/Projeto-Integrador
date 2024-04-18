@@ -113,9 +113,9 @@ def convert_to_obj():
     stl_to_obj(input_file)
     print("Obj done.")
     
-def convert_stl_to_glb(rotation_angle=0):
-    global input_file
-
+def convert_stl_to_glb(file_name, rotation_angle=0):
+  
+    input_file = file_name
     # Load the STL file
     mesh = trimesh.load_mesh(input_file)
 
@@ -148,22 +148,3 @@ def convert_stl_to_glb(rotation_angle=0):
         f.write(glb)
 
     print("GLB done.")
-
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
