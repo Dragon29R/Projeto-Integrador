@@ -5,6 +5,7 @@ import pyvista as pv
 from stl_to_obj import stl_to_obj 
 import trimesh
 import os
+import math
 
 
 def select_input_file():
@@ -49,6 +50,7 @@ def convert_to_stl(checkbox_action=False, center_action=False, scale_factor=-1):
             print(f"Distance between the first and last coordinates: {distance:.2f} km")
 
             distance *= 1000
+            distance = math.ceil(distance)
             df_copy['X'] = df_copy['X'] * distance
             df_copy['Y'] = df_copy['Y'] * distance
             df_copy['Z'] = df_copy['Z'] * distance
