@@ -34,7 +34,7 @@ root.title("CSV to STL/OBJ Converter")
 root.configure(bg='beige')  
 checkbox_action = tk.BooleanVar() 
 center_action = tk.BooleanVar()
-scale_factor = DoubleVar(value=1.0)
+scale_factor = DoubleVar(value=-1.0)
 rotation_angle = DoubleVar(value=0.0)
 
 
