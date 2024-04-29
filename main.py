@@ -32,6 +32,7 @@ checkbox_action = tk.BooleanVar()
 center_action = tk.BooleanVar()
 scale_factor = DoubleVar(value=-1.0)
 rotation_angle = DoubleVar(value=0.0)
+resize_1km = tk.BooleanVar()
 
 
 
@@ -52,6 +53,8 @@ checkbox = tk.Checkbutton(frame, text="Convert from meters to latitude/longitude
 
 center_checkbox = tk.Checkbutton(frame, text="Center the point cloud", variable=center_action, bg='beige', font=customFont)
 
+resize_1km_checkbox = tk.Checkbutton(frame, text="Resize to 1 km width", variable=resize_1km, bg='beige', font=customFont)
+
 scale_label = tk.Label(frame, text="Scale factor:", bg='beige', font=customFont)
 
 scale_entry = tk.Entry(frame, textvariable=scale_factor, bg='white', font=customFont)
@@ -60,7 +63,7 @@ rotation_label = tk.Label(frame, text="Rotation angle to GLB file:", bg='beige',
 
 rotation_entry = tk.Entry(frame, textvariable=rotation_angle, bg='white', font=customFont)
 
-convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get(),center_action.get(), scale_factor.get() ), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
+convert_button = tk.Button(frame, text="Convert to STL", command=lambda: convert_to_stl(checkbox_action.get(),center_action.get(), scale_factor.get(), resize_1km.get() ), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
 convert_obj_button = tk.Button(frame, text="Convert from STL to OBJ", command=lambda: convert_to_obj(), bg='#0052cc', fg='white', font=customFont, relief=tk.FLAT, state=tk.DISABLED)
 
@@ -72,8 +75,10 @@ close_button = tk.Button(frame, text="Close", command=root.destroy, bg='#d9534f'
 
 # Arrange buttons with consistent padding
 select_button.pack(fill=tk.X, padx=30, pady=7)
+
 checkbox.pack(padx=30, pady=7)
 center_checkbox.pack(padx=30, pady=7)
+resize_1km_checkbox.pack(padx=30, pady=7)
 scale_label.pack(padx=30, pady=7)
 scale_entry.pack(fill=tk.X, padx=30, pady=7)
 convert_button.pack(fill=tk.X, padx=30, pady=7)
