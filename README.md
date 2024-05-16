@@ -68,10 +68,20 @@ Then install the necessary dependencies via pip, as in the ubuntu guide above.
 
 2-Select the desired CSV file for conversion using the "Select file" button.
 
-3-Set the desired options such as scale conversion, centering, and resizing.
+3-Pressing the button "Convert to STL" will convert the selected CSV file to an STL file, using the following parameters:
+ 
+ - "Convert from meters to latitude/longitude/bathymetry" will convert the coordinates from meters to latitude/longitude and bathymetry. It is necessary to check this box.
 
-4-Convert into STL and save the STL file.
+ - "Center the point cloud" will center the point cloud. It is necessary to check this box.
 
-5-Choose the created file in STL and then choose the desired output format OBJ or GLB and initiate the conversion.
+ - "Resize to 1 km width" will adjust the model to a standard width of 1 km on at least 2 sides. The remaining sides will be adjusted to 0.5km.  This is optional.
 
-6-Save the converted file.
+ - "Scale Factor" allows the user to adjust the scale factor. If the user wishes to do this process automatically, leave the value as -1.0 in the box.
+
+4-Pressing the button "Convert from STL to OBJ" will convert the selected CSV file to an OBJ file, which does not require any additional parameters. Remember to select the STL file you want to convert beforehand.
+
+5-Pressing the button "Convert from STL to GLB" will convert the selected CSV file to a GLB file, using the following parameters:
+
+ - "Rotation" allows the user to set a specific angle when converting to GLB format. This is optional.
+
+
