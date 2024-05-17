@@ -1,25 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
-  <title>Document</title>
-</head>
+<html>
 <body>
-  Hello, world 2
-=======
-  <title>Home</title>
-</head>
-<body>
-  <h1>Flask</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.file.label }}<br>
+            {{ form.file(size=32) }}
+        </p>
+        <p>
+            {{ form.checkbox1.label }}<br>
+            {{ form.checkbox1() }}
+        </p>
+        <p>
+            {{ form.checkbox2.label }}<br>
+            {{ form.checkbox2() }}
+        </p>
+        <p>
+          {{ form.checkbox3.label }}<br>
+          {{ form.checkbox3() }}
+      </p>
 
-  <form method="POST" enctype="multipart/form-data">
-    {{form.hidden_tag()}}
-    {{form.file}} 
-    {{form.submit()}}
-  </form>
+        <p>
+            {{ form.convert() }} 
 
->>>>>>> Stashed changes
+        </p>
+    </form>
 </body>
 </html>

@@ -8,11 +8,6 @@ import os
 import math
 
 
-
-
-
-
-
 def select_input_file():
     global input_file
     input_file = filedialog.askopenfilename(title="Select input file",filetypes=(("All files", "*.*"),))
