@@ -15,37 +15,26 @@ import os
 # sys.argv[4] = rotation angle
 #csv->stl->obj/glb
 
-if len(sys.argv) == 2:
-  file_name = sys.argv[1]
+if len(sys.argv) < 3:
+    print("Usage: python pipeline.py <filename> <0 for OBJ or 1 for GLB> [scale factor] [rotation angle]")
+    sys.exit(1)
 
-if len(sys.argv) == 3:
-  file_name = sys.argv[1]
-  obj_or_stl = sys.argv[2]
+file_name = sys.argv[1]
+output_type = sys.argv[2]
+scale_factor = sys.argv[3] if len(sys.argv) > 3 else 1.0
+rotation_angle = sys.argv[4] if len(sys.argv) > 4 else 0.0
 
-if len(sys.argv) == 4:
-  file_name = sys.argv[1]
-  obj_or_stl = sys.argv[2]
-  scale_factor = sys.argv[3]
+print("Filename: ", file_name)
+print("Output Type: ", "OBJ" if output_type == "0" else "GLB")
 
-if len(sys.argv) == 5:
-  file_name = sys.argv[1]
-  obj_or_stl = sys.argv[2]
-  scale_factor = sys.argv[3]
-  rotation_angle = sys.argv[4]
-
-
-print("Arg0: ", sys.argv[0])
-print("Arg1: ", sys.argv[1])
-print("Arg2: ", sys.argv[2])
-
-
-if sys.argv[2] == "0":
-  print("Converting to obj")
-  stl_to_obj(file_name, "new.obj")
-
-if obj_or_stl == "1":
-    print("Converting to glb")
+if output_type == "0":
+    print("Converting to OBJ...")
+    stl_to_obj(file_name, "new.obj")
+elif output_type == "1":
+    print("Converting to GLB...")
     convert_stl_to_glb(file_name, rotation_angle)
-
+else:
+    print("Invalid format choice; use '0' for OBJ or '1' for GLB.")
+    sys.exit(1)
   
 # example = python3 pipeline.py cc.stl 0
